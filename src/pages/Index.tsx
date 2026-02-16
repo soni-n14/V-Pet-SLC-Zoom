@@ -1,6 +1,7 @@
 /**
  * Main app flow: intro → pet selection → dashboard.
  * Dogs get time-of-day initial hunger/energy; other pets use config defaults.
+ * Restores dashboard + pet from localStorage when returning (e.g. from Q&A).
  */
 import { useState } from "react";
 import { IntroSequence } from "@/components/IntroSequence";
@@ -8,9 +9,28 @@ import { PetSelection } from "@/components/PetSelection";
 import { Dashboard } from "@/components/Dashboard";
 import { petConfigs, PetType } from "@/lib/petConfig";
 
+function getInitialStageAndPet(): { stage: "intro" | "selection" | "dashboard"; pet: any } {
+  if (typeof window === "undefined") return { stage: "intro", pet: null };
+  const introSeen = localStorage.getItem("vpet_intro_seen") === "true";
+  const saved = localStorage.getItem("vpet_pet_data");
+  if (saved) {
+    try {
+      const data = JSON.parse(saved);
+      if (data.pet && data.pet.name && data.pet.type) {
+        if (introSeen) return { stage: "dashboard", pet: data.pet };
+      }
+    } catch (_) {
+      /* ignore */
+    }
+  }
+  if (introSeen) return { stage: "selection", pet: null };
+  return { stage: "intro", pet: null };
+}
+
 const Index = () => {
-  const [stage, setStage] = useState<"intro" | "selection" | "dashboard">("intro");
-  const [pet, setPet] = useState<any>(null);
+  const initial = getInitialStageAndPet();
+  const [stage, setStage] = useState<"intro" | "selection" | "dashboard">(initial.stage);
+  const [pet, setPet] = useState<any>(initial.pet);
 
   const handleIntroComplete = () => {
     localStorage.setItem("vpet_intro_seen", "true");

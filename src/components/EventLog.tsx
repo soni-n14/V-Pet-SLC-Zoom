@@ -25,8 +25,8 @@ const formatTime = (date: Date | string | number) => {
 
 export const EventLog = ({ events }: EventLogProps) => {
   return (
-    <Card className="p-4 h-full w-full flex flex-col">
-      <h3 className="text-sm font-semibold mb-2 text-foreground">Events</h3>
+    <Card className="p-4 w-full h-full flex flex-col min-h-0 overflow-hidden">
+      <h3 className="text-sm font-semibold mb-2 text-foreground shrink-0">Events</h3>
       <ScrollArea className="flex-1 min-h-0">
         <AnimatePresence mode="popLayout">
           {events.length === 0 ? (
