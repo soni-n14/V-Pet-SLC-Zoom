@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { DogIcon, Droplets, Heart, Sparkles, Battery, DollarSign, Clock, HelpCircle, Plus, Trash2, Stethoscope, ShoppingBag, GlassWater, Scissors } from "lucide-react";
+import { DogIcon, Droplets, Heart, Sparkles, Battery, DollarSign, Clock, HelpCircle, Plus, Stethoscope, ShoppingBag, GlassWater, Scissors } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -516,10 +516,6 @@ export const Dashboard = ({ pet: initialPet, onReset }: DashboardProps) => {
             <Button variant="outline" size="sm" onClick={onReset}>
               <Plus className="w-4 h-4 mr-1" />
               New Pet
-            </Button>
-            <Button variant="outline" size="sm" onClick={onReset}>
-              <Trash2 className="w-4 h-4 mr-1" />
-              Delete Pet
             </Button>
             <OptionsMenu onGenerateReport={() => setShowReport(true)} />
           </div>
