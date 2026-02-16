@@ -10,49 +10,37 @@ const existingQAs = [
   {
     id: 1,
     question: "How do I keep my pet happy?",
-    answer: "Keep all stats above 50% by regularly feeding, playing, and bathing your pet. A happy pet means a happy you! 🎉",
-    user: "PetLover123",
-    admin: "Admin Sarah",
+    answer: "Keep hunger, thirst, hygiene, energy, and happiness above 50% by feeding, giving water, baths, rest, and play.",
     date: "2 days ago"
   },
   {
     id: 2,
     question: "When does my pet sleep?",
-    answer: "Your pet sleeps between 10 PM and 6 AM. During this time, energy regenerates and stats decay slower. Sweet dreams! 😴",
-    user: "NightOwl",
-    admin: "Admin Mike",
+    answer: "Pets sleep between 10 PM and 6 AM. Energy goes up and other stats drop more slowly during that time.",
     date: "3 days ago"
   },
   {
     id: 3,
     question: "What happens if stats get too low?",
-    answer: "Low stats affect your pet's mood and happiness. Don't worry though - just interact with your pet to bring them back up! 💪",
-    user: "Worried_Owner",
-    admin: "Admin Sarah",
+    answer: "Low stats change your pet's mood. Use the care actions (feed, bathe, rest, etc.) to raise them again.",
     date: "5 days ago"
   },
   {
     id: 4,
     question: "Can I change my pet's name?",
-    answer: "Currently, your pet's name is set during selection, but we love the name you chose! It's perfect for them. ❤️",
-    user: "NameChanger",
-    admin: "Admin Mike",
+    answer: "The name is set when you pick your pet and cannot be changed later.",
     date: "1 week ago"
   },
   {
     id: 5,
     question: "How often should I check on my pet?",
-    answer: "Check in a few times throughout the day! Your pet loves your attention and will be excited to see you. 🐾",
-    user: "BusyBee",
-    admin: "Admin Sarah",
+    answer: "A few times a day is enough. Stats go down over time, so check in to feed and care for your pet.",
     date: "1 week ago"
   },
   {
     id: 6,
     question: "What do the different stats mean?",
-    answer: "Hunger and Thirst need food and water, Energy needs rest, Hygiene needs baths, and Happiness reflects overall well-being. Easy! ✨",
-    user: "NewUser99",
-    admin: "Admin Mike",
+    answer: "Hunger and thirst: food and water. Energy: rest. Hygiene: baths. Happiness: overall state from the other stats.",
     date: "2 weeks ago"
   }
 ];
@@ -95,7 +83,6 @@ const QA = () => {
             <div className="space-y-6">
               {existingQAs.map((qa) => (
                 <Card key={qa.id} className="p-6 hover:shadow-lg transition-shadow">
-                  {/* Question */}
                   <div className="mb-4">
                     <div className="flex items-start justify-between mb-2">
                       <h3 className="text-lg font-semibold text-foreground">{qa.question}</h3>
@@ -103,17 +90,8 @@ const QA = () => {
                         {qa.date}
                       </span>
                     </div>
-                    <p className="text-sm text-muted-foreground">
-                      Asked by <span className="font-medium">{qa.user}</span>
-                    </p>
                   </div>
-
-                  {/* Answer */}
                   <div className="bg-primary/5 rounded-lg p-4 border-l-4 border-primary">
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="w-2 h-2 rounded-full bg-primary" />
-                      <span className="text-sm font-semibold text-primary">{qa.admin}</span>
-                    </div>
                     <p className="text-foreground leading-relaxed">{qa.answer}</p>
                   </div>
                 </Card>
