@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { DogIcon, Droplets, Heart, Sparkles, Battery, DollarSign, Clock, HelpCircle, Plus, Stethoscope, ShoppingBag, GlassWater, Scissors } from "lucide-react";
+import { DogIcon, Droplets, Heart, Sparkles, Battery, DollarSign, Clock, HelpCircle, Plus, Stethoscope, ShoppingBag, GlassWater, Scissors, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -40,9 +40,10 @@ interface EventEntry {
 interface DashboardProps {
   pet: Pet;
   onReset: () => void;
+  onReplayIntro: () => void;
 }
 
-export const Dashboard = ({ pet: initialPet, onReset }: DashboardProps) => {
+export const Dashboard = ({ pet: initialPet, onReset, onReplayIntro }: DashboardProps) => {
   const [pet, setPet] = useState(initialPet);
   const [totalSpent, setTotalSpent] = useState(0);
   const [events, setEvents] = useState<EventEntry[]>([]);
@@ -512,6 +513,10 @@ export const Dashboard = ({ pet: initialPet, onReset }: DashboardProps) => {
             <Button variant="outline" size="sm" onClick={handleReplayTutorial}>
               <HelpCircle className="w-4 h-4 mr-1" />
               Tutorial
+            </Button>
+            <Button variant="outline" size="sm" onClick={onReplayIntro}>
+              <Target className="w-4 h-4 mr-1" />
+              Our Motive
             </Button>
             <Button variant="outline" size="sm" onClick={onReset}>
               <Plus className="w-4 h-4 mr-1" />

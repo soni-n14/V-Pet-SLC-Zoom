@@ -32,9 +32,17 @@ const Index = () => {
   const [stage, setStage] = useState<"intro" | "selection" | "dashboard">(initial.stage);
   const [pet, setPet] = useState<any>(initial.pet);
 
-  const handleIntroComplete = () => {
-    localStorage.setItem("vpet_intro_seen", "true");
-    setStage("selection");
+  const handleIntroComplete = (currentPet: any) => {
+    if (currentPet) {
+      setStage("dashboard");
+    } else {
+      localStorage.setItem("vpet_intro_seen", "true");
+      setStage("selection");
+    }
+  };
+
+  const handleReplayIntro = () => {
+    setStage("intro");
   };
 
   /** Dog: hunger/energy vary by time (sleep 10p–6a, feeds ~7a and 7p). Other pets: use config. */
@@ -135,7 +143,7 @@ const Index = () => {
   };
 
   if (stage === "intro") {
-    return <IntroSequence onComplete={handleIntroComplete} />;
+    return <IntroSequence onComplete={() => handleIntroComplete(pet)} />;
   }
 
   if (stage === "selection") {
@@ -143,7 +151,7 @@ const Index = () => {
   }
 
   if (stage === "dashboard" && pet) {
-    return <Dashboard pet={pet} onReset={handleReset} />;
+    return <Dashboard pet={pet} onReset={handleReset} onReplayIntro={handleReplayIntro} />;
   }
 
   return null;

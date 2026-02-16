@@ -19,12 +19,17 @@ const petTypes = [
   { id: "rabbit", name: "Rabbit", icon: Rabbit, color: "bg-gradient-to-br from-blue-100 to-indigo-100", available: true },
 ];
 
+const LETTERS_AND_SPACES_ONLY = /^[a-zA-Z\s]*$/;
+
 export const PetSelection = ({ onSelectPet }: PetSelectionProps) => {
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const [petName, setPetName] = useState("");
 
+  const nameInvalid = petName.length > 0 && !LETTERS_AND_SPACES_ONLY.test(petName);
+  const canSubmit = selectedType && petName.trim() && !nameInvalid;
+
   const handleSubmit = () => {
-    if (selectedType && petName.trim()) {
+    if (canSubmit) {
       localStorage.removeItem("vpet_pet_data");
       localStorage.setItem("vpet_show_tutorial", "true");
       onSelectPet(selectedType, petName.trim());
@@ -97,12 +102,18 @@ export const PetSelection = ({ onSelectPet }: PetSelectionProps) => {
                 value={petName}
                 onChange={(e) => setPetName(e.target.value)}
                 placeholder="Enter a name..."
-                className="mb-4"
+                className={`mb-1 ${nameInvalid ? "border-destructive bg-destructive/5 focus-visible:ring-destructive" : ""}`}
                 maxLength={20}
               />
+              {nameInvalid && (
+                <p className="mb-4 text-sm text-destructive">
+                  You can only use letters for your pet&apos;s name.
+                </p>
+              )}
+              {!nameInvalid && <div className="mb-4" />}
               <Button
                 onClick={handleSubmit}
-                disabled={!petName.trim()}
+                disabled={!canSubmit}
                 className="w-full bg-gradient-to-r from-primary to-primary/80 hover:opacity-90"
                 size="lg"
               >

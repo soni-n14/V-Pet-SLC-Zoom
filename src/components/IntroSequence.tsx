@@ -1,7 +1,7 @@
 /**
  * Full-screen intro with typewriter messages. Click or key advances; last message calls onComplete.
  */
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface IntroSequenceProps {
@@ -19,10 +19,13 @@ const messages = [
   "Now let's get started.",
 ];
 
+const IGNORE_ADVANCE_MS = 400; // Ignore click/key right after mount (e.g. from "Our Motive" button)
+
 export const IntroSequence = ({ onComplete }: IntroSequenceProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showPrompt, setShowPrompt] = useState(false);
   const [displayedText, setDisplayedText] = useState("");
+  const mountedAtRef = useRef(Date.now());
 
   useEffect(() => {
     setDisplayedText("");
@@ -52,6 +55,7 @@ export const IntroSequence = ({ onComplete }: IntroSequenceProps) => {
 
   useEffect(() => {
     const handleAdvance = () => {
+      if (Date.now() - mountedAtRef.current < IGNORE_ADVANCE_MS) return;
       if (currentIndex < messages.length - 1) {
         setCurrentIndex(currentIndex + 1);
       } else {
