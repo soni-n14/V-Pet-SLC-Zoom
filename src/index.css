@@ -1,0 +1,106 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Black dominant with yellow accents */
+    --background: 0 0% 8%;
+    --foreground: 45 100% 65%;
+
+    /* Card styling - dark with slight lift */
+    --card: 0 0% 12%;
+    --card-foreground: 45 100% 65%;
+
+    /* Popover styling */
+    --popover: 0 0% 12%;
+    --popover-foreground: 45 100% 65%;
+
+    /* Vibrant yellow primary */
+    --primary: 45 100% 55%;
+    --primary-foreground: 0 0% 8%;
+
+    /* Golden secondary */
+    --secondary: 45 90% 50%;
+    --secondary-foreground: 0 0% 8%;
+
+    /* Muted dark tones */
+    --muted: 0 0% 18%;
+    --muted-foreground: 45 30% 50%;
+
+    /* Bright yellow accent */
+    --accent: 50 100% 60%;
+    --accent-foreground: 0 0% 8%;
+
+    /* Dark red for warnings */
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 45 100% 65%;
+
+    /* Dark borders */
+    --border: 45 20% 22%;
+    --input: 45 20% 22%;
+    --ring: 45 100% 55%;
+
+    --radius: 0.75rem;
+
+    /* Gradients */
+    --gradient-warm: linear-gradient(135deg, hsl(0 0% 8%), hsl(0 0% 12%));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 12%), hsl(0 0% 15%));
+    --gradient-primary: linear-gradient(135deg, hsl(45 100% 55%), hsl(50 100% 60%));
+    --gradient-secondary: linear-gradient(135deg, hsl(45 90% 50%), hsl(50 85% 55%));
+    
+    /* Shadows with yellow glow */
+    --shadow-soft: 0 2px 20px -5px hsl(45 100% 55% / 0.2);
+    --shadow-card: 0 4px 24px -8px hsl(45 100% 55% / 0.15);
+    
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+
+  .dark {
+    --background: 0 0% 8%;
+    --foreground: 45 100% 70%;
+
+    --card: 0 0% 12%;
+    --card-foreground: 45 100% 70%;
+
+    --popover: 0 0% 12%;
+    --popover-foreground: 45 100% 70%;
+
+    --primary: 45 100% 55%;
+    --primary-foreground: 0 0% 8%;
+
+    --secondary: 45 90% 45%;
+    --secondary-foreground: 0 0% 8%;
+
+    --muted: 0 0% 18%;
+    --muted-foreground: 45 40% 60%;
+
+    --accent: 50 100% 60%;
+    --accent-foreground: 0 0% 8%;
+
+    --destructive: 0 65% 50%;
+    --destructive-foreground: 45 100% 70%;
+
+    --border: 45 20% 25%;
+    --input: 45 20% 25%;
+    --ring: 45 100% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html, body {
+    @apply bg-background text-foreground;
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+}
