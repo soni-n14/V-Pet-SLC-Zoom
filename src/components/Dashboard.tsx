@@ -43,9 +43,10 @@ interface DashboardProps {
   onReplayIntro: () => void;
 }
 
+//React State Data Storage
 export const Dashboard = ({ pet: initialPet, onReset, onReplayIntro }: DashboardProps) => {
   const [pet, setPet] = useState(initialPet);
-  const [totalSpent, setTotalSpent] = useState(0);
+  const [totalSpent, setTotalSpent] = useState(0); 
   const [events, setEvents] = useState<EventEntry[]>([]);
   const [activeAction, setActiveAction] = useState<string | null>(null);
   const [actionTimer, setActionTimer] = useState(0);
@@ -72,13 +73,13 @@ export const Dashboard = ({ pet: initialPet, onReset, onReplayIntro }: Dashboard
   const [feedCount, setFeedCount] = useState<number>(0);
   const [showReport, setShowReport] = useState(false);
   /** History of stat snapshots for report graphs; capped at 500, appended when pet.stats change. */
-  const [statHistory, setStatHistory] = useState<{ t: number; stats: typeof pet.stats }[]>([]);
+  const [statHistory, setStatHistory] = useState<{ t: number; stats: typeof pet.stats }[]>([]); // Uses Stat history array to store the history over time
   const lastAppendedStatsRef = useRef<string>("");
 
   const petConfig = petConfigs[pet.type as PetType] || petConfigs.dog;
 
   useEffect(() => {
-    const savedData = localStorage.getItem("vpet_pet_data");
+    const savedData = localStorage.getItem("vpet_pet_data");// localStorage is data stored for each user despite browser reloading
     if (!savedData || savedData === "{}") {
       // New pet, show initial purchase
       setShowInitialPurchase(true);
