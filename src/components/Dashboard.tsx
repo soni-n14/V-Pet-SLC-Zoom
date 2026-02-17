@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { DogIcon, Droplets, Heart, Sparkles, Battery, DollarSign, Clock, HelpCircle, Plus, Stethoscope, ShoppingBag, GlassWater, Scissors, Target } from "lucide-react";
+import { DogIcon, Droplets, Heart, Sparkles, Battery, DollarSign, Clock, HelpCircle, Plus, Stethoscope, ShoppingBag, GlassWater, Scissors, Target, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -75,6 +75,8 @@ export const Dashboard = ({ pet: initialPet, onReset, onReplayIntro }: Dashboard
   /** History of stat snapshots for report graphs; capped at 500, appended when pet.stats change. */
   const [statHistory, setStatHistory] = useState<{ t: number; stats: typeof pet.stats }[]>([]); // Uses Stat history array to store the history over time
   const lastAppendedStatsRef = useRef<string>("");
+  const actionIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const actionCostRef = useRef<number>(0);
 
   const petConfig = petConfigs[pet.type as PetType] || petConfigs.dog;
 
@@ -216,22 +218,23 @@ export const Dashboard = ({ pet: initialPet, onReset, onReplayIntro }: Dashboard
     statChanges: Partial<typeof pet.stats>,
     extraEffects?: () => void
   ) => {
+    if (actionIntervalRef.current) clearInterval(actionIntervalRef.current);
+    actionCostRef.current = cost;
     setActiveAction(action);
     setActionTimer(duration);
     setTotalSpent((prev) => prev + cost);
-    
+
     if (cost > 0) {
       addEvent(`Spent $${cost} on ${action.toLowerCase()}`);
     }
 
-    // Countdown timer
     const interval = setInterval(() => {
       setActionTimer((prev) => {
         if (prev <= 1) {
+          if (actionIntervalRef.current === interval) actionIntervalRef.current = null;
           clearInterval(interval);
           setActiveAction(null);
-          
-          // Apply stat changes
+
           setPet((currentPet) => {
             const newStats = { ...currentPet.stats, ...statChanges };
             return {
@@ -240,12 +243,11 @@ export const Dashboard = ({ pet: initialPet, onReset, onReplayIntro }: Dashboard
               emotion: updateEmotion(newStats),
             };
           });
-          
-          // Apply extra effects if any
+
           if (extraEffects) {
             extraEffects();
           }
-          
+
           addEvent(`Finished ${action.toLowerCase()}`);
           toast.success(`${action} complete!`);
           return 0;
@@ -253,6 +255,22 @@ export const Dashboard = ({ pet: initialPet, onReset, onReplayIntro }: Dashboard
         return prev - 1;
       });
     }, 1000);
+    actionIntervalRef.current = interval;
+  };
+
+  /** Cancel the current timed action; no stat updates, refund cost, log event. */
+  const handleCancelAction = () => {
+    if (!activeAction) return;
+    if (actionIntervalRef.current) {
+      clearInterval(actionIntervalRef.current);
+      actionIntervalRef.current = null;
+    }
+    const cost = actionCostRef.current;
+    setTotalSpent((prev) => Math.max(0, prev - cost));
+    setActiveAction(null);
+    setActionTimer(0);
+    addEvent(`${activeAction} stopped early`);
+    toast.info("Task cancelled");
   };
 
   useEffect(() => {
@@ -489,6 +507,15 @@ export const Dashboard = ({ pet: initialPet, onReset, onReplayIntro }: Dashboard
       {/* Action Overlay */}
       {activeAction && (
         <div className="fixed inset-0 bg-black/90 flex flex-col items-center justify-center z-50 animate-fade-in">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={handleCancelAction}
+            className="absolute top-4 right-4 h-10 w-10 rounded-full bg-white/10 text-white hover:bg-white/20 hover:text-white z-10"
+            aria-label="Cancel task"
+          >
+            <X className="h-5 w-5" />
+          </Button>
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
